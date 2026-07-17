@@ -227,4 +227,4 @@ the paper's reported results — see `train_audio_wav2vec2.py` and
 
 ## License
 
-[Author: choose a license — MIT is a common default for research code.]
+MIT
