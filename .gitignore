@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.Python
+
+# Virtual environments
+venv/
+venv_visual/
+*.venv
+
+# Datasets (large, licensed, or third-party -- do not commit)
+ravdess/
+CREMA-D/
+tess_unzipped/
+savee_unzipped/
+fer2013/
+fer2013_unzipped/
+archive/
+archive (1)/
+archive1_unzipped/
+archive_unzipped/
+expw/
+visual_dataset/
+visual_dataset_aligned/
+visual_staging/
+*.zip
+*.7z*
+
+# Model checkpoints and large artifacts
+*.h5
+*.pt
+*.pth
+*.bin
+audio_wav2vec2_model/
+text_model/
+text_model_test/
+text_roberta_model/
+visual_resnet50_model.h5
+visual_facenet_model.pt
+*_training_output/
+
+# Generated outputs
+*.npz
+results/
+figures/
+found_files.txt
+all_py_notebooks.txt
+candidate_project_files.txt
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# HuggingFace / torch cache
+.cache/

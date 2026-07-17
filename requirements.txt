@@ -1,0 +1,27 @@
+tensorflow[and-cuda]==2.17.0
+transformers>=4.40
+accelerate>=1.1.0
+# torch: install separately via the official CUDA-matched index, NOT from
+# this file directly -- plain `pip install torch` from PyPI can resolve a
+# build with mismatched bundled NCCL/CUDA versions (caused an
+# "undefined symbol: ncclCommResume" crash in practice). Use:
+#   pip install torch==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+#   pip install torchvision==0.19.1 --index-url https://download.pytorch.org/whl/cu121
+# torch and torchvision versions must be from the SAME PyTorch release --
+# installing facenet-pytorch (for the visual VGGFace2 experiment) silently
+# pulled in a mismatched torchvision and broke transformers imports entirely
+# (a "torchvision::nms does not exist" crash) until both were re-pinned
+# together. If installing any new package in this venv, re-check both
+# versions afterward with:
+#   python3 -c "import torch, torchvision; print(torch.__version__, torchvision.__version__)"
+torch==2.4.1
+torchvision==0.19.1
+facenet-pytorch
+datasets>=2.19
+scikit-learn>=1.4
+librosa>=0.10
+pandas>=2.2
+numpy>=1.26
+opencv-python>=4.9
+mtcnn>=0.1.1
+tqdm>=4.66
