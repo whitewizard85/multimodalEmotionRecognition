@@ -5,24 +5,18 @@ fine-tuned wav2vec 2.0 speech model, a fine-tuned BERT/RoBERTa text model,
 and a fine-tuned ResNet50 facial-expression model via decision-level
 probability averaging.
 
-## Honest framing, up front
+## Background
 
-This repository is not the code behind a paper's original claimed numbers —
-it's the code that **replaced** them after a re-verification turned up a
-train/test leakage bug (augmentation applied before, not after, the
-train/test split) that had inflated the audio and text branches' reported
-accuracy, and an architecture mismatch in the visual branch (a small CNN
-trained from scratch, despite being labeled "ResNet-50" in the paper's own
-results table). Both issues are fixed here. The honestly-evaluated results
-are lower than what was originally reported, and the repository includes
-the diagnostic scripts (`test_leaky_hypothesis.py`,
-`test_leaky_visual_hypothesis.py`) that were used to *deliberately
-reproduce* the leakage bug and quantify its effect (a 28-point accuracy
-inflation on the audio branch alone), rather than just asserting the fix
-mattered.
-
-If you're evaluating whether to trust or reuse this code, that history is
-probably the single most useful thing to know about it.
+The original manuscript's audio and text results were affected by a
+train/test leakage bug: augmentation was applied before the train/test
+split rather than after, which let augmented copies of the same recording
+or sentence end up on both sides of the split. The visual branch also
+didn't match its own description in the paper (a small CNN trained from
+scratch, though the results table called it "ResNet-50"). Both are fixed
+in this code. `test_leaky_hypothesis.py` and `test_leaky_visual_hypothesis.py`
+reproduce the leakage bug on purpose, to measure its effect rather than
+just assume it mattered — it inflated the audio branch's accuracy by about
+28 points.
 
 ## Results
 
@@ -44,8 +38,7 @@ missing-modality robustness test.
 
 ## Evaluation protocol and caveats
 
-**This is the most important section to read before trusting these
-numbers.** Two things to know:
+Two things worth knowing before using these numbers:
 
 1. **Fusion is evaluated on synthetically paired samples.** The audio,
    text, and visual test sets are independently collected — there is no
@@ -198,17 +191,16 @@ python3 generate_figures.py \
     └── test_leaky_visual_hypothesis.py  # DIAGNOSTIC ONLY -- tests the same for visual
 ```
 
-The two `test_leaky_*` scripts are deliberately included even though they
-demonstrate a *bug*, not a feature — they're what we used to quantify the
-leakage effect rather than just assert it mattered, and we think that's
-useful for anyone building a similar pipeline to be aware of. **Do not use
-their output as a real evaluation result** — they say so loudly in their
-own docstrings and console output.
+`test_leaky_hypothesis.py` and `test_leaky_visual_hypothesis.py` reproduce
+the leakage bug on purpose and print a warning that their output isn't a
+valid evaluation result. They're kept in the repo since they're what
+established how much the bug mattered, not because they're something to
+run for real numbers.
 
-`train_audio.py`, `train_visual.py`, and `train_visual_facenet.py` are kept
-for transparency (they document the from-scratch and negative-result paths
-that led to the final architecture choices) but are not the models used in
-the paper's reported results — see `train_audio_wav2vec2.py` and
+`train_audio.py`, `train_visual.py`, and `train_visual_facenet.py` are the
+from-scratch and negative-result architectures that came before the final
+choices. They're kept for reference but aren't what produced the paper's
+reported results — see `train_audio_wav2vec2.py` and
 `train_visual_resnet50.py` for those.
 
 ## Known limitations not yet addressed
